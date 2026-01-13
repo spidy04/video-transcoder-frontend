@@ -4,6 +4,10 @@ Frontend application for uploading videos and tracking real-time transcoding pro
 
 Built with React, TypeScript, and Vite. Designed to work on both desktop and mobile browsers.
 
+## Demo
+
+Live demo: https://transcoder.wizznode.xyz
+
 ## Overview
 
 This application allows users to:
