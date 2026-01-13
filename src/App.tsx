@@ -14,8 +14,7 @@ import { toast } from "sonner";
 
 type ActiveCard = "upload" | "transcode";
 
-const isMobile = typeof navigator !== "undefined" && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
+const isMobile = typeof navigator !== "undefined" && /Android|iPhone|iPad/i.test(navigator.userAgent);
 
 const INITIAL_TRANSCODE_STATE: TranscodeState = {
   "360p": { resolution: "360p", progress: 0, status: "queued", eta: 0 },
