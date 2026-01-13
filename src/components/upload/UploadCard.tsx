@@ -54,18 +54,24 @@ export function UploadCard({
           }`}
           onClick={() => fileInputRef.current?.click()}
           onDragOver={
-            isMobile ? undefined : (e) => {
-              e.preventDefault();
-              setDragActive(true);
-            }
+            isMobile
+              ? undefined
+              : (e) => {
+                  e.preventDefault();
+                  setDragActive(true);
+                }
           }
           onDragLeave={isMobile ? undefined : () => setDragActive(false)}
-          onDrop={isMobile ? undefined : (e) => {
-            e.preventDefault();
-            setDragActive(false);
-            const droppedFile = e.dataTransfer.files?.[0];
-            if (droppedFile) onSelectFile(droppedFile);
-          }}
+          onDrop={
+            isMobile
+              ? undefined
+              : (e) => {
+                  e.preventDefault();
+                  setDragActive(false);
+                  const droppedFile = e.dataTransfer.files?.[0];
+                  if (droppedFile) onSelectFile(droppedFile);
+                }
+          }
         >
           <Input
             ref={fileInputRef}
@@ -78,10 +84,15 @@ export function UploadCard({
             }}
           />
 
-          <p className="text-sm font-medium">{isMobile ? "Tap to select a video" : "Drag & drop your video here"}</p>
-          <p className="text-xs text-muted-foreground mt-1">
-            or <span className="underline">browse your files</span>
+          <p className="text-sm font-medium">
+            {isMobile ? "Tap to select a video" : "Drag & drop your video here"}
           </p>
+
+          {!isMobile && (
+            <p className="text-xs text-muted-foreground mt-1">
+              or <span className="underline">browse your files</span>
+            </p>
+          )}
         </div>
 
         {file && (

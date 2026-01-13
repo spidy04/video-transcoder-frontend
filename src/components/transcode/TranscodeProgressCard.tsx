@@ -26,6 +26,11 @@ export function TranscodeProgressCard({ progress, onUploadAnother }: Props) {
     return status && status !== "done";
   });
 
+  const isPreparing = resolutions.every((r) => {
+    const status = progress[r.key]?.status;
+    return status === "queued" || status === "preparing";
+  });
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 40 }}
@@ -45,7 +50,10 @@ export function TranscodeProgressCard({ progress, onUploadAnother }: Props) {
             const item = progress[r.key];
 
             return (
-              <div key={r.key} className="border rounded-lg p-3 sm:p-4 space-y-2">
+              <div
+                key={r.key}
+                className="border rounded-lg p-3 sm:p-4 space-y-2"
+              >
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">{r.label}</span>
                   {item?.status === "done" && (
@@ -76,6 +84,13 @@ export function TranscodeProgressCard({ progress, onUploadAnother }: Props) {
               </div>
             );
           })}
+
+          {isPreparing && (
+            <div className="text-center text-xs text-muted-foreground pt-2">
+              Preparing your video. Transcoding usually starts within 20–30
+              seconds.
+            </div>
+          )}
         </CardContent>
       </Card>
 
