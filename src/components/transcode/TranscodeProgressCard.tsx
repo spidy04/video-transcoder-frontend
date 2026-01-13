@@ -32,12 +32,12 @@ export function TranscodeProgressCard({ progress, onUploadAnother }: Props) {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 40 }}
       transition={{ ease: "easeOut", duration: 0.35 }}
-      className="relative w-105"
+      className="relative w-full mx-auto"
     >
-      <Card className="shadow-lg">
+      <Card className="w-full shadow-lg">
         <CardContent className="p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Transcoding</h2>
+            <h2 className="text-base sm:text-lg font-semibold">Transcoding</h2>
             {isTranscoding && <Spinner className="text-muted-foreground" />}
           </div>
 
@@ -45,7 +45,7 @@ export function TranscodeProgressCard({ progress, onUploadAnother }: Props) {
             const item = progress[r.key];
 
             return (
-              <div key={r.key} className="border rounded-lg p-3 space-y-2">
+              <div key={r.key} className="border rounded-lg p-3 sm:p-4 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">{r.label}</span>
                   {item?.status === "done" && (
@@ -58,7 +58,7 @@ export function TranscodeProgressCard({ progress, onUploadAnother }: Props) {
                   className={item?.status === "done" ? "opacity-60" : ""}
                 />
 
-                <div className="text-xs text-muted-foreground">
+                <div className="text-xs text-muted-foreground break-words">
                   {item?.status === "queued" && "Queued"}
                   {item?.status === "preparing" && "Preparing"}
                   {item?.status === "processing" && (

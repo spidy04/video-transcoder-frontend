@@ -14,6 +14,9 @@ import { toast } from "sonner";
 
 type ActiveCard = "upload" | "transcode";
 
+const isMobile = typeof navigator !== "undefined" && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+
 const INITIAL_TRANSCODE_STATE: TranscodeState = {
   "360p": { resolution: "360p", progress: 0, status: "queued", eta: 0 },
   "480p": { resolution: "480p", progress: 0, status: "queued", eta: 0 },
@@ -209,10 +212,11 @@ export default function VideoUploadPage() {
   if (!isHydrated) return null;
 
   return (
-    <div className="min-h-screen w-screen flex items-center justify-center bg-muted overflow-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center bg-muted px-4 sm:px-0">
+
       <Toaster />
 
-      <div className="relative w-105 min-h-105">
+      <div className=" relative w-full max-w-md sm:max-w-lg md:max-w-lg lg:w-105 min-h-[420px] mx-auto">
         <StackedCard active={activeCard === "upload"}>
           <UploadCard
             key={fileInputKey}
@@ -221,6 +225,7 @@ export default function VideoUploadPage() {
             uploadProgress={uploadProgress}
             uploading={uploading}
             dragActive={dragActive}
+            isMobile={isMobile}
             setDragActive={setDragActive}
             onSelectFile={selectFile}
             onUpload={handleUpload}

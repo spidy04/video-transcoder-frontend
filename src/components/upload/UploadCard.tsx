@@ -20,6 +20,7 @@ interface Props {
   uploadProgress: number;
   uploading: boolean;
   dragActive: boolean;
+  isMobile: boolean;
   onSelectFile: (file: File) => void;
   onUpload: () => void;
   onCancel: () => void;
@@ -32,6 +33,7 @@ export function UploadCard({
   uploadProgress,
   uploading,
   dragActive,
+  isMobile,
   onSelectFile,
   onUpload,
   onCancel,
@@ -40,23 +42,25 @@ export function UploadCard({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <Card className="w-105 shadow-lg relative">
+    <Card className="w-full shadow-lg relative">
       <CardContent className="p-6 space-y-6">
         <h1 className="text-xl font-semibold text-center">Video Upload</h1>
 
         <div
           className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition ${
-            dragActive
+            dragActive && !isMobile
               ? "border-primary bg-primary/5"
               : "border-muted-foreground/30"
           }`}
           onClick={() => fileInputRef.current?.click()}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragActive(true);
-          }}
-          onDragLeave={() => setDragActive(false)}
-          onDrop={(e) => {
+          onDragOver={
+            isMobile ? undefined : (e) => {
+              e.preventDefault();
+              setDragActive(true);
+            }
+          }
+          onDragLeave={isMobile ? undefined : () => setDragActive(false)}
+          onDrop={isMobile ? undefined : (e) => {
             e.preventDefault();
             setDragActive(false);
             const droppedFile = e.dataTransfer.files?.[0];
@@ -74,7 +78,7 @@ export function UploadCard({
             }}
           />
 
-          <p className="text-sm font-medium">Drag & drop your video here</p>
+          <p className="text-sm font-medium">{isMobile ? "Tap to select a video" : "Drag & drop your video here"}</p>
           <p className="text-xs text-muted-foreground mt-1">
             or <span className="underline">browse your files</span>
           </p>
