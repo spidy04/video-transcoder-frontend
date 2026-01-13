@@ -1,73 +1,112 @@
-# React + TypeScript + Vite
+# Video Transcoder Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend application for uploading videos and tracking real-time transcoding progress.
 
-Currently, two official plugins are available:
+Built with React, TypeScript, and Vite. Designed to work on both desktop and mobile browsers.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Overview
 
-## React Compiler
+This application allows users to:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Upload a video from the browser
+- Track upload progress
+- View real-time transcoding status for multiple resolutions
+- Restore the active job state after refresh
+- Upload another video after completion
 
-## Expanding the ESLint configuration
+The frontend communicates with a separate backend that handles storage and video transcoding.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- Axios
+- WebSocket
+- Framer Motion
+- Bun (package manager and runtime)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Backend Expectations
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The backend is expected to provide:
+
+- An API to create an upload job and return a pre-signed upload URL
+- An API to fetch job status by job ID
+- A WebSocket endpoint to stream transcoding progress updates
+
+This repository contains frontend code only.
+
+## Environment Variables
+
+```env
+VITE_API_BASE_URL=https://backend.example.com
+VITE_WS_URL=wss://backend.example.com/ws
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Install dependencies:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+bun install
+```
+
+Start the development server:
+```
+bun run dev
+```
+
+Build for production:
+```
+bun run build
+```
+
+Preview the production build:
+```
+bun run preview
+```
+
+## Notes
+
+- Drag and drop upload is enabled on desktop devices
+- On mobile devices, upload is initiated via tap
+- Transcoding progress is shown per resolution (360p, 480p, 720p)
+- The UI displays a short “preparing” state before transcoding starts
+
+## Deployment
+
+This project is deployed using Vercel.  
+Any push to the connected GitHub branch triggers an automatic build and deployment.
+
+## Limitations
+
+The current version of the application has the following limitations:
+
+- Single file upload
+  - Only one video can be uploaded at a time.
+
+- Non-resumable uploads
+  - If the browser tab is closed, refreshed, or the network drops during upload, the upload must be restarted.
+
+- Large file reliability on mobile
+  - Uploads rely on a single PUT request.
+  - On mobile devices, long uploads may fail if the browser goes into the background or the screen locks.
+
+- Fixed output resolutions
+  - Transcoding is currently limited to predefined resolutions (360p, 480p, 720p).
+
+- No playback or download UI
+  - The frontend does not provide video playback or download links for transcoded files.
+
+- Limited error recovery
+  - Transcoding failures are not currently retried or surfaced with detailed error messages.
+
+- Backend dependency
+  - The application assumes the backend is available and responsive.
+  - There is no offline or degraded-mode support.
+
+ ## Notes
+
+These limitations are known and acceptable for the current scope of the project.  
+Future iterations may address resumable uploads, improved error handling, and playback support.
